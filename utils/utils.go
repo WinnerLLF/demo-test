@@ -1,9 +1,11 @@
 package utils
 
 import (
+	"crypto/md5"
 	"errors"
 	"fmt"
 	"github.com/shopspring/decimal"
+	"math/rand"
 	"os/exec"
 	"strconv"
 	"time"
@@ -290,4 +292,34 @@ func CheckAgency(date, date1 string) bool {
 	} else {
 		return true
 	}
+}
+
+//生成随机字符串 数字+大写+小写
+func GetRandomS(size int) string {
+	str := "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	bytes := []byte(str)
+	result := []byte{}
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	for i := 0; i < size; i++ {
+		result = append(result, bytes[r.Intn(len(bytes))])
+	}
+	return string(result)
+}
+
+func GetRandomlowS(size int) string {
+	str := "0123456789abcdefghijklmnopqrstuvwxyz"
+	bytes := []byte(str)
+	result := []byte{}
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	for i := 0; i < size; i++ {
+		result = append(result, bytes[r.Intn(len(bytes))])
+	}
+	return string(result)
+}
+
+func StrToMD5(str string) (result string) {
+	md5Ctx1 := md5.New()
+	md5Ctx1.Write([]byte(str))
+	result = fmt.Sprintf("%x", md5Ctx1.Sum(nil))
+	return
 }

@@ -2,6 +2,7 @@ package utils
 
 import (
 	"crypto/md5"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"github.com/shopspring/decimal"
@@ -322,4 +323,20 @@ func StrToMD5(str string) (result string) {
 	md5Ctx1.Write([]byte(str))
 	result = fmt.Sprintf("%x", md5Ctx1.Sum(nil))
 	return
+}
+
+func TestAgentR() {
+	var agentR interface{}
+	str := "{\"T5\":\"4.00\",\"P1\":\"4.00\",\"T1\":\"4.00\",\"T14\":\"0\",\"Others\":\"4.00\"}"
+	if err := json.Unmarshal([]byte(str), &agentR); err != nil {
+		fmt.Println("data info err：", err)
+	}
+	if agentR != nil {
+		for key, value := range agentR.(map[string]interface{}) {
+			ratios := value.(string)
+			if len(ratios) > 0 {
+				fmt.Println(key, decimal.RequireFromString(ratios))
+			}
+		}
+	}
 }
